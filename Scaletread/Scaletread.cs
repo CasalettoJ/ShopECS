@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Scaletread.Engine.States;
+using Scaletread.Engine.States.Interfaces;
+using System;
 
 namespace Scaletread
 {
@@ -9,12 +12,14 @@ namespace Scaletread
     /// </summary>
     public class Scaletread : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private KeyboardState _prevKey;
+        private IState _currentState;
 
         public Scaletread()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -38,9 +43,13 @@ namespace Scaletread
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.IsMouseVisible = true;
+            this.Window.IsBorderless = false;
+            this.Window.AllowUserResizing = false;
+            this._currentState = new TitleState(Content);
+            this._graphics.PreferredBackBufferWidth = 800;
+            this._graphics.PreferredBackBufferHeight = 600;
         }
 
         /// <summary>
@@ -59,12 +68,19 @@ namespace Scaletread
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if(this.IsActive)
+            {
+                KeyboardState currentKey = Keyboard.GetState();
+                this._currentState = this._currentState.UpdateState(gameTime, currentKey, this._prevKey);
+                this._prevKey = Keyboard.GetState();
 
-            // TODO: Add your update logic here
+                if(this._currentState == null)
+                {
+                    this.Exit();
+                }
 
-            base.Update(gameTime);
+                base.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -73,9 +89,12 @@ namespace Scaletread
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            // Draw Entities
+            this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+            this._currentState.DrawContent(this._spriteBatch);
+            this._spriteBatch.End();
 
             base.Draw(gameTime);
         }

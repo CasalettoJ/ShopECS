@@ -38,6 +38,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DevConstants.cs" />
+    <Compile Include="Engine\Levels\Interfaces\ILevel.cs" />
+    <Compile Include="Engine\Levels\TestLevel.cs" />
+    <Compile Include="Engine\States\Interfaces\IState.cs" />
+    <Compile Include="Engine\States\PlayingState.cs" />
+    <Compile Include="Engine\States\TitleState.cs" />
     <Compile Include="Scaletread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,11 +71,10 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Engine\Components\" />
     <Folder Include="Engine\Entities\Interfaces\" />
     <Folder Include="Engine\FileIO\" />
-    <Folder Include="Engine\Levels\Interfaces\" />
     <Folder Include="Engine\ProceduralGeneration\Interfaces\" />
-    <Folder Include="Engine\States\Interfaces\" />
     <Folder Include="Engine\Systems\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
