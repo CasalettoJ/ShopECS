@@ -18,7 +18,7 @@ namespace Scaletread.Engine.Levels
         private float _testPosX = 20;
         private float _testPosY = 20;
 
-        public void DrawContent(SpriteBatch spriteBatch)
+        public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
             spriteBatch.Draw(_bg, Vector2.Zero);
             spriteBatch.Draw(_testPlayer, new Vector2((int)_testPosX, (int)_testPosY), Color.Red);
@@ -30,7 +30,7 @@ namespace Scaletread.Engine.Levels
             _testPlayer = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
         }
 
-        public ILevel Update(GameTime gameTime, KeyboardState currentKey, KeyboardState prevKey)
+        public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
         {
             if(currentKey.IsKeyDown(Keys.W))
             {
@@ -52,6 +52,34 @@ namespace Scaletread.Engine.Levels
             {
                 return null;
             }
+            if (currentKey.IsKeyDown(Keys.OemPlus) && prevKey.IsKeyUp(Keys.OemPlus))
+            {
+                camera.Scale += .25f;
+            }
+            if (currentKey.IsKeyDown(Keys.OemMinus) && prevKey.IsKeyUp(Keys.OemMinus))
+            {
+                camera.Scale -= .25f;
+            }
+            if (currentKey.IsKeyDown(Keys.Q))
+            {
+                camera.Rotation -= 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if (currentKey.IsKeyDown(Keys.E))
+            {
+                camera.Rotation += 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            camera.TargetPosition = new Vector2(_testPosX+16, _testPosY+16);
+            if (Vector2.Distance(camera.Position, camera.TargetPosition) > 0)
+            {
+                float distance = Vector2.Distance(camera.Position, camera.TargetPosition);
+                Vector2 direction = Vector2.Normalize(camera.TargetPosition - camera.Position);
+                float velocity = distance * 2.5f;
+                if (distance > 10f)
+                {
+                    camera.Position += direction * velocity * (camera.Scale >= 1 ? camera.Scale : 1) * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
+            }
+
             return this;
         }
     }

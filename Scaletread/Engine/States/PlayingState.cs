@@ -25,9 +25,9 @@ namespace Scaletread.Engine.States
             this.SetLevel(level);
         }
 
-        public void DrawContent(SpriteBatch spriteBatch)
+        public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
-            this._currentLevel.DrawContent(spriteBatch);
+            this._currentLevel.DrawContent(spriteBatch, camera);
         }
 
         public void SetLevel(ILevel level)
@@ -40,10 +40,10 @@ namespace Scaletread.Engine.States
             }
         }
 
-        public IState UpdateState(GameTime gameTime, KeyboardState currentKey, KeyboardState prevKey)
+        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
         {
             ILevel nextLevel = this._currentLevel;
-            nextLevel = this._currentLevel.Update(gameTime, currentKey, prevKey);
+            nextLevel = this._currentLevel.Update(gameTime, camera, currentKey, prevKey);
 
             if(nextLevel != this._currentLevel && nextLevel != null)
             {

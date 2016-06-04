@@ -26,7 +26,7 @@ namespace Scaletread.Engine.States
             _title = _content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderTitle);
         }
 
-        public void DrawContent(SpriteBatch spriteBatch)
+        public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
             spriteBatch.Draw(_title, Vector2.Zero);
         }
@@ -36,8 +36,9 @@ namespace Scaletread.Engine.States
             // Unimplemented for Title
         }
 
-        public IState UpdateState(GameTime gameTime, KeyboardState currentKey, KeyboardState prevKey)
+        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
         {
+            camera.ResetCamera();
             if(currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))
             {
                 return null;

@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DevConstants.cs" />
+    <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Levels\Interfaces\ILevel.cs" />
     <Compile Include="Engine\Levels\TestLevel.cs" />
     <Compile Include="Engine\States\Interfaces\IState.cs" />

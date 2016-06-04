@@ -13,7 +13,7 @@ namespace Scaletread.Engine.Levels.Interfaces
     public interface ILevel
     {
         void LoadLevel(ContentManager content);
-        ILevel Update(GameTime gameTime, KeyboardState currentKey, KeyboardState prevKey);
-        void DrawContent(SpriteBatch spriteBatch);
+        ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey);
+        void DrawContent(SpriteBatch spriteBatch, Camera camera);
     }
 }
