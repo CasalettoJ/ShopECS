@@ -27,14 +27,14 @@ namespace Scaletread
 
         protected override void Initialize()
         {
-            this._camera = new Camera(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), 0f, 2f);
+            this._camera = new Camera(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), 0f, 1f);
             base.Initialize();
         }
         
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            this.IsMouseVisible = true;
+            this.IsMouseVisible = false;
             this.Window.IsBorderless = false;
             this.Window.AllowUserResizing = false;
             this._currentState = new TitleState(Content);

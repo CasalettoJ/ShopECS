@@ -32,12 +32,12 @@ namespace Scaletread.Engine.Levels
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
-            spriteBatch.Draw(_testPlayer, new Vector2((int)_testPosX, (int)_testPosY), Color.Red);
-            spriteBatch.Draw(_tileSheet, position: camera.ScreenToWorld(Mouse.GetState().Position), sourceRectangle: new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize)+(1* (int)currentTile.X), (int)(currentTile.Y * DevConstants.Grid.CellSize)+(1*(int)currentTile.Y), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White * .5f);
+            spriteBatch.Draw(_tileSheet, position: camera.ScreenToWorld(Mouse.GetState().Position), sourceRectangle: new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize), (int)(currentTile.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White * .5f);
             foreach(TestEntity entity in testSprites)
             {
-                spriteBatch.Draw(_tileSheet, position: entity.position, sourceRectangle: new Rectangle((int)(entity.spriteSheetPosition.X * DevConstants.Grid.CellSize) + (1 * (int)entity.spriteSheetPosition.X), (int)(entity.spriteSheetPosition.Y * DevConstants.Grid.CellSize) + (1 * (int)entity.spriteSheetPosition.Y), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White);
+                spriteBatch.Draw(_tileSheet, position: entity.position, sourceRectangle: new Rectangle((int)(entity.spriteSheetPosition.X * DevConstants.Grid.CellSize), (int)(entity.spriteSheetPosition.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White);
             }
+            spriteBatch.Draw(_testPlayer, new Vector2((int)_testPosX, (int)_testPosY), Color.Red);
         }
 
         public void LoadLevel(ContentManager content)

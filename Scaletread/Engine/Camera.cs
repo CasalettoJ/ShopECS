@@ -31,7 +31,7 @@ namespace Scaletread.Engine
 
         public void ResetCamera()
         {
-            this.Scale = 2f;
+            this.Scale = 1f;
             this.Position = FullViewport.Bounds.Center.ToVector2();
             this.TargetEntity = Guid.Empty;
             this.Bounds = FullViewport.Bounds;

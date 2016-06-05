@@ -12,13 +12,12 @@ namespace Scaletread
         {
             public const string Placeholder = "Sprites/placeholder";
             public const string PlaceholderTitle = "Sprites/placeholdertitle";
-            public const string PlaceholderBG = "Sprites/placeholderbackground";
-            public const string Spritesheet = "Sprites/roguelikeIndoor_transparent";
+            public const string Spritesheet = "Sprites/dcss";
         }
 
         public static class Grid
         {
-            public const int CellSize = 16;
+            public const int CellSize = 32;
             public const int WallWeight = 10000;
         }
 
