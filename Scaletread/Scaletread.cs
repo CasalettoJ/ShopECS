@@ -27,7 +27,7 @@ namespace Scaletread
 
         protected override void Initialize()
         {
-            this._camera = new Camera(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), 0f, 1f);
+            this._camera = new Camera(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), 0f, 2f);
             base.Initialize();
         }
         

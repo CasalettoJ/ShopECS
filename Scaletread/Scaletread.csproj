@@ -72,7 +72,7 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Engine\Components\" />
+    <Folder Include="Engine\Entities\Components\" />
     <Folder Include="Engine\Entities\Interfaces\" />
     <Folder Include="Engine\FileIO\" />
     <Folder Include="Engine\ProceduralGeneration\Interfaces\" />

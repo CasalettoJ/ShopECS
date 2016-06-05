@@ -18,7 +18,7 @@ namespace Scaletread.Engine
         public Guid TargetEntity;
         public Viewport FullViewport;
 
-        public static readonly Vector2 Velocity = new Vector2(900, 900);
+        public static readonly Vector2 Velocity = new Vector2(1300, 1300);
 
         public Camera(Viewport viewport, Vector2 position, float rotation, float scale)
         {
@@ -31,7 +31,7 @@ namespace Scaletread.Engine
 
         public void ResetCamera()
         {
-            this.Scale = 1f;
+            this.Scale = 2f;
             this.Position = FullViewport.Bounds.Center.ToVector2();
             this.TargetEntity = Guid.Empty;
             this.Bounds = FullViewport.Bounds;
