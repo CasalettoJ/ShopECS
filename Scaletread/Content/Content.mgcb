@@ -49,3 +49,21 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/dcss.png
 
+#begin Fonts/Message.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Color
+/build:Fonts/Message.spritefont
+
+#begin Fonts/MessageLarge.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Color
+/build:Fonts/MessageLarge.spritefont
+
+#begin Fonts/Debug.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Color
+/build:Fonts/Debug.spritefont
+

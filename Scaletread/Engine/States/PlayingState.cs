@@ -18,11 +18,11 @@ namespace Scaletread.Engine.States
         private ILevel _currentLevel;
         private ContentManager _content;
 
-        public PlayingState(ContentManager content, ILevel level, IState previous = null)
+        public PlayingState(ContentManager content, Camera camera, ILevel level, IState previous = null)
         {
             this._previousState = previous;
             this._content = new ContentManager(content.ServiceProvider, content.RootDirectory);
-            this.SetLevel(level);
+            this.SetLevel(level, camera);
         }
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
@@ -30,13 +30,13 @@ namespace Scaletread.Engine.States
             this._currentLevel.DrawContent(spriteBatch, camera);
         }
 
-        public void SetLevel(ILevel level)
+        public void SetLevel(ILevel level, Camera camera)
         {
             if(this._content != null && level != null)
             {
                 this._content.Unload();
                 this._currentLevel = level;
-                this._currentLevel.LoadLevel(this._content);
+                this._currentLevel.LoadLevel(this._content, camera);
             }
         }
 
@@ -47,7 +47,7 @@ namespace Scaletread.Engine.States
 
             if(nextLevel != this._currentLevel && nextLevel != null)
             {
-                this.SetLevel(nextLevel);
+                this.SetLevel(nextLevel, camera);
             }
             else if(nextLevel == null)
             {

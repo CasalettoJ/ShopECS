@@ -14,6 +14,6 @@ namespace Scaletread.Engine.States.Interfaces
     {
         IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey);
         void DrawContent(SpriteBatch spriteBatch, Camera camera);
-        void SetLevel(ILevel level);
+        void SetLevel(ILevel level, Camera camera);
     }
 }

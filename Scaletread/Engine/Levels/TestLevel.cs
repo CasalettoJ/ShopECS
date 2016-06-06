@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Scaletread.Engine.Entities;
+using Scaletread.Engine.Entities.Components;
+using Scaletread.Engine.Systems;
 
 namespace Scaletread.Engine.Levels
 {
@@ -25,37 +28,92 @@ namespace Scaletread.Engine.Levels
         List<TestEntity> testSprites;
         private Texture2D _testPlayer;
         private Texture2D _tileSheet;
-        private float _testPosX = 20;
-        private float _testPosY = 20;
+        private List<Creature> _creatures;
 
         public Vector2 currentTile;
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
+            // Draw Creatures
+            this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _tileSheet));
+
+            #region debug
+            //Draw Mouse
             spriteBatch.Draw(_tileSheet, position: camera.ScreenToWorld(Mouse.GetState().Position), sourceRectangle: new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize), (int)(currentTile.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White * .5f);
-            foreach(TestEntity entity in testSprites)
-            {
-                spriteBatch.Draw(_tileSheet, position: entity.position, sourceRectangle: new Rectangle((int)(entity.spriteSheetPosition.X * DevConstants.Grid.CellSize), (int)(entity.spriteSheetPosition.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White);
-            }
-            spriteBatch.Draw(_testPlayer, new Vector2((int)_testPosX, (int)_testPosY), Color.Red);
+            #endregion
         }
 
-        public void LoadLevel(ContentManager content)
+        public void LoadLevel(ContentManager content, Camera camera)
         {
             _testPlayer = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
             _tileSheet = content.Load<Texture2D>(DevConstants.ArtAssets.Spritesheet);
+            this._creatures = new List<Creature>();
+
+            #region Debug Creation
             currentTile = new Vector2(0, 0);
             testSprites = new List<TestEntity>();
+            this._creatures.Add(new Creature()
+            {
+                Id = Guid.NewGuid(),
+                BaseVelocity = 300,
+                Velocity = 300,
+                Health = 100,
+                MaxHealth = 100,
+                Money = 1000,
+                DisplayInfo = new Display()
+                {
+                    Color = Color.White,
+                    Opacity = 1f,
+                    Origin = Vector2.Zero,
+                    Rotation = 0f,
+                    Scale = 1f,
+                    SpriteEffect = SpriteEffects.None,
+                    SpriteSource = new Rectangle(23*DevConstants.Grid.CellSize, 42*DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    Layer = DisplayLayer.FLOOR
+                },
+                PositionInfo = new Position()
+                {
+                    OriginPosition = new Vector2(20,20),
+                    TileHeight = 1,
+                    TileWidth = 1
+                }
+            });
+            camera.TargetEntity = this._creatures[0].Id;
+            #endregion
         }
 
         public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
         {
+            #region Debug
+            Random random = new Random();
             if(Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                testSprites.Add(new TestEntity()
+                this._creatures.Add(new Creature()
                 {
-                    position = camera.ScreenToWorld(Mouse.GetState().Position),
-                    spriteSheetPosition = currentTile
+                    BaseVelocity = random.Next(),
+                    Velocity = random.Next(0, 400),
+                    Health = 100,
+                    Id = Guid.NewGuid(),
+                    MaxHealth = 100,
+                    Money = 100,
+                    MovementType = MovementType.INPUT,
+                    DisplayInfo = new Display()
+                    {
+                        Color = Color.White,
+                        Layer = DisplayLayer.FLOOR,
+                        Opacity = 1f,
+                        Origin = Vector2.Zero,
+                        Scale = 1f,
+                        Rotation = 0f,
+                        SpriteEffect = SpriteEffects.None,
+                        SpriteSource = new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize), (int)(currentTile.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize)
+                    },
+                    PositionInfo = new Position()
+                    {
+                        OriginPosition = camera.ScreenToWorld(Mouse.GetState().Position),
+                        TileHeight = 1,
+                        TileWidth = 1
+                    }
                 });
             }
             if(currentKey.IsKeyDown(Keys.Left) && prevKey.IsKeyUp(Keys.Left))
@@ -110,56 +168,26 @@ namespace Scaletread.Engine.Levels
                 }
                 currentTile = new Vector2(x, y);
             }
-            
+            #endregion
 
-            if (currentKey.IsKeyDown(Keys.W))
-            {
-                this._testPosY -= 300 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.A))
-            {
-                this._testPosX -= 300 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.S))
-            {
-                this._testPosY += 300 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.D))
-            {
-                this._testPosX += 300 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
+            // Level input
             if (currentKey.IsKeyDown(Keys.Escape))
             {
                 return null;
             }
-            if (currentKey.IsKeyDown(Keys.OemPlus) && prevKey.IsKeyUp(Keys.OemPlus))
-            {
-                camera.Scale += .25f;
-            }
-            if (currentKey.IsKeyDown(Keys.OemMinus) && prevKey.IsKeyUp(Keys.OemMinus))
-            {
-                camera.Scale -= .25f;
-            }
-            if (currentKey.IsKeyDown(Keys.Q))
-            {
-                camera.Rotation -= 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            if (currentKey.IsKeyDown(Keys.E))
-            {
-                camera.Rotation += 5f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            camera.TargetPosition = new Vector2(_testPosX+16, _testPosY+16);
-            if (Vector2.Distance(camera.Position, camera.TargetPosition) > 0)
-            {
-                float distance = Vector2.Distance(camera.Position, camera.TargetPosition);
-                Vector2 direction = Vector2.Normalize(camera.TargetPosition - camera.Position);
-                float velocity = distance * 2.5f;
-                if (distance > 10f)
-                {
-                    camera.Position += direction * velocity * (camera.Scale >= 1 ? camera.Scale : 1) * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-            }
 
+            // Camera Updates
+            CameraSystem.ControlCamera(currentKey, prevKey, camera, gameTime);
+            CameraSystem.PanCamera(camera, gameTime);
+
+            // Entity Movement Updates
+            this._creatures.ForEach(c => MovementSystem.InputMovement(currentKey, prevKey, gameTime, c.PositionInfo, c.Velocity));
+
+            // Entity Information Updates
+
+            // Set up for next frame
+            CameraSystem.UpdateCameraTarget(this._creatures, camera);
+            
             return this;
         }
     }

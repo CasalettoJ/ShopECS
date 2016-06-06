@@ -23,7 +23,9 @@ namespace Scaletread
 
         public static class FontAssets
         {
-
+            public const string Message = "Fonts/Message";
+            public const string MessageLarge = "Fonts/MessageLarge";
+            public const string Debug = "Fonts/Debug";
         }
     }
 }

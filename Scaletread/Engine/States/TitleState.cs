@@ -31,7 +31,7 @@ namespace Scaletread.Engine.States
             spriteBatch.Draw(_title, Vector2.Zero);
         }
 
-        public void SetLevel(ILevel level)
+        public void SetLevel(ILevel level, Camera camera)
         {
             // Unimplemented for Title
         }
@@ -47,7 +47,7 @@ namespace Scaletread.Engine.States
             if(currentKey.IsKeyDown(Keys.Enter) && prevKey.IsKeyUp(Keys.Enter))
             {
                 ILevel nextLevel = new TestLevel();
-                return new PlayingState(this._content, nextLevel, this);
+                return new PlayingState(this._content, camera, nextLevel, this);
             }
 
             return this;

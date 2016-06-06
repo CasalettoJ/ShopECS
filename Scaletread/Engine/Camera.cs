@@ -17,6 +17,8 @@ namespace Scaletread.Engine
         public Vector2 TargetPosition;
         public Guid TargetEntity;
         public Viewport FullViewport;
+        public Matrix CurrentMatrix;
+        public Matrix CurrentInverseMatrix;
 
         public static readonly Vector2 Velocity = new Vector2(1300, 1300);
 
