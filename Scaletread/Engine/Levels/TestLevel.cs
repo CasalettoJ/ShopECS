@@ -25,12 +25,16 @@ namespace Scaletread.Engine.Levels
     {
         public const int testsheetX = 26;
         public const int testsheetY = 17;
-        List<TestEntity> testSprites;
+        public Vector2 currentTile;
+        private List<TestEntity> testSprites;
+        private int money = 1000;
+
         private Texture2D _testPlayer;
         private Texture2D _tileSheet;
-        private List<Creature> _creatures;
+        private Texture2D _testHUD;
+        private SpriteFont _testHUDFont;
 
-        public Vector2 currentTile;
+        private List<Creature> _creatures;
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
@@ -47,6 +51,8 @@ namespace Scaletread.Engine.Levels
         {
             _testPlayer = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
             _tileSheet = content.Load<Texture2D>(DevConstants.ArtAssets.Spritesheet);
+            _testHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
+            _testHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
             this._creatures = new List<Creature>();
 
             #region Debug Creation
@@ -82,12 +88,13 @@ namespace Scaletread.Engine.Levels
             #endregion
         }
 
-        public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
+        public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             #region Debug
             Random random = new Random();
-            if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton != ButtonState.Pressed)
             {
+                this.money -= 25;
                 this._creatures.Add(new Creature()
                 {
                     BaseVelocity = random.Next(),
@@ -181,7 +188,18 @@ namespace Scaletread.Engine.Levels
             CameraSystem.PanCamera(camera, gameTime);
 
             // Entity Movement Updates
-            this._creatures.ForEach(c => MovementSystem.InputMovement(currentKey, prevKey, gameTime, c.PositionInfo, c.Velocity));
+            this._creatures.ForEach(c =>
+            {
+                switch(c.MovementType)
+                {
+                    case MovementType.AI:
+                        //AI Movement System Call
+                        break;
+                    case MovementType.INPUT:
+                        MovementSystem.InputMovement(currentKey, prevKey, gameTime, c.PositionInfo, c.Velocity);
+                        break;
+                }
+            });
 
             // Entity Information Updates
 
@@ -189,6 +207,12 @@ namespace Scaletread.Engine.Levels
             CameraSystem.UpdateCameraTarget(this._creatures, camera);
             
             return this;
+        }
+
+        public void DrawUI(SpriteBatch spriteBatch, Camera camera)
+        {
+            spriteBatch.Draw(_testHUD, new Vector2(20, 20));
+            spriteBatch.DrawString(_testHUDFont, this.money.ToString(), new Vector2(175, 30), Color.MonoGameOrange);
         }
     }
 }

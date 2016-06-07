@@ -36,7 +36,7 @@ namespace Scaletread.Engine.States
             // Unimplemented for Title
         }
 
-        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
+        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             camera.ResetCamera();
             if(currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))
@@ -51,6 +51,11 @@ namespace Scaletread.Engine.States
             }
 
             return this;
+        }
+
+        public void DrawUI(SpriteBatch spriteBatch, Camera camera)
+        {
+            // Unimplemented for Title
         }
     }
 }

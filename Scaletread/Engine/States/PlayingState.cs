@@ -40,10 +40,10 @@ namespace Scaletread.Engine.States
             }
         }
 
-        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey)
+        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             ILevel nextLevel = this._currentLevel;
-            nextLevel = this._currentLevel.Update(gameTime, camera, currentKey, prevKey);
+            nextLevel = this._currentLevel.Update(gameTime, camera, currentKey, prevKey, currentMouse, prevMouse);
 
             if(nextLevel != this._currentLevel && nextLevel != null)
             {
@@ -56,6 +56,11 @@ namespace Scaletread.Engine.States
 
             return this;
 
+        }
+
+        public void DrawUI(SpriteBatch spriteBatch, Camera camera)
+        {
+            this._currentLevel.DrawUI(spriteBatch, camera);
         }
     }
 }

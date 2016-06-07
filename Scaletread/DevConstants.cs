@@ -13,6 +13,7 @@ namespace Scaletread
             public const string Placeholder = "Sprites/placeholder";
             public const string PlaceholderTitle = "Sprites/placeholdertitle";
             public const string Spritesheet = "Sprites/dcss";
+            public const string PlaceholderHUD = "Sprites/HUD Money2";
         }
 
         public static class Grid
