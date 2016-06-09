@@ -40,11 +40,8 @@
   <ItemGroup>
     <Compile Include="DevConstants.cs" />
     <Compile Include="Engine\Camera.cs" />
-    <Compile Include="Engine\Entities\Components\Display.cs" />
-    <Compile Include="Engine\Entities\Components\Label.cs" />
-    <Compile Include="Engine\Entities\Components\MovementType.cs" />
-    <Compile Include="Engine\Entities\Components\Position.cs" />
-    <Compile Include="Engine\Entities\Creature.cs" />
+    <Compile Include="Engine\Components\Components.cs" />
+    <Compile Include="Engine\Components\Entity.cs" />
     <Compile Include="Engine\Levels\Interfaces\ILevel.cs" />
     <Compile Include="Engine\Levels\TestLevel.cs" />
     <Compile Include="Engine\States\Interfaces\IState.cs" />

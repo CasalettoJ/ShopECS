@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Input;
 using Scaletread.Engine.Entities;
 using Scaletread.Engine.Entities.Components;
 using Scaletread.Engine.Systems;
+using Scaletread.Engine.Components;
 
 namespace Scaletread.Engine.Levels
 {
@@ -34,7 +35,7 @@ namespace Scaletread.Engine.Levels
         private Texture2D _testHUD;
         private SpriteFont _testHUDFont;
 
-        private List<Creature> _creatures;
+        private ECSContainer _components;
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
@@ -51,9 +52,8 @@ namespace Scaletread.Engine.Levels
         {
             _testPlayer = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
             _tileSheet = content.Load<Texture2D>(DevConstants.ArtAssets.Spritesheet);
-            _testHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
             _testHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
-            this._creatures = new List<Creature>();
+            this._components = new ECSContainer();
 
             #region Debug Creation
             currentTile = new Vector2(0, 0);
