@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Scaletread.Engine.Entities;
-using Scaletread.Engine.Entities.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,20 +49,28 @@ namespace Scaletread.Engine.Systems
             }
         }
 
-        public static void UpdateCameraTarget(List<Creature> creatures, Camera camera)
+        public static void UpdateCameraTarget(Player player, List<Creature> creatures, Camera camera)
         {
             Creature targetCreature = creatures.Where(x => x.Id == camera.TargetEntity).FirstOrDefault();
             
             if(targetCreature != null)
             {
-                camera.TargetPosition = targetCreature.PositionInfo.OriginPosition + determineCenter(targetCreature.PositionInfo);
+                SetCameraPosition(targetCreature.PositionInfo, camera);
+            }
+            else if (player.Id == camera.TargetEntity)
+            {
+                SetCameraPosition(player.PositionInfo, camera);
             }
         }
 
+        private static void SetCameraPosition(Position positionInfo, Camera camera)
+        {
+            camera.TargetPosition = positionInfo.OriginPosition + determineCenter(positionInfo);
+        }
 
         private static Vector2 determineCenter(Position positionInfo)
         {
-            Rectangle objectSize = new Rectangle(0, 0, positionInfo.TileWidth * DevConstants.Grid.CellSize, positionInfo.TileHeight * DevConstants.Grid.CellSize);
+            Rectangle objectSize = new Rectangle(0, 0, positionInfo.Width, positionInfo.Height);
             return objectSize.Center.ToVector2();
         }
     }

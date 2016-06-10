@@ -28,7 +28,7 @@ namespace Scaletread.Engine.States
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
-            spriteBatch.Draw(_title, Vector2.Zero);
+            spriteBatch.Draw(_title, new Rectangle(0,0,camera.FullViewport.Width, camera.FullViewport.Height), Color.White);
         }
 
         public void SetLevel(ILevel level, Camera camera)

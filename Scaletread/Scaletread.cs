@@ -39,8 +39,8 @@ namespace Scaletread
             this.Window.IsBorderless = false;
             this.Window.AllowUserResizing = false;
             this._currentState = new TitleState(Content);
-            this._graphics.PreferredBackBufferWidth = 800;
-            this._graphics.PreferredBackBufferHeight = 600;
+            this._graphics.PreferredBackBufferWidth = 1440;
+            this._graphics.PreferredBackBufferHeight = 900;
             this._graphics.ApplyChanges();
             this._camera = new Camera(GraphicsDevice.Viewport, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), 0f, 1f);
             this._debugText = Content.Load<SpriteFont>(DevConstants.FontAssets.Debug);

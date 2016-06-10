@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Scaletread.Engine.Entities.Components;
+using Scaletread.Engine.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Scaletread.Engine.Systems
         {
             if(positionInfo != null && displayInfo != null)
             {
-                Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + DevConstants.Grid.CellSize * positionInfo.TileWidth, (positionInfo.OriginPosition.Y) + DevConstants.Grid.CellSize * positionInfo.TileWidth), camera.CurrentMatrix);
+                Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + positionInfo.Width, (positionInfo.OriginPosition.Y) + positionInfo.Height), camera.CurrentMatrix);
                 Vector2 topLeft = Vector2.Transform(new Vector2(positionInfo.OriginPosition.X, positionInfo.OriginPosition.Y), camera.CurrentMatrix);
                 Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
 

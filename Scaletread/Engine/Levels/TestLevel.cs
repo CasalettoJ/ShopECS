@@ -9,63 +9,57 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Scaletread.Engine.Entities;
-using Scaletread.Engine.Entities.Components;
 using Scaletread.Engine.Systems;
 
 namespace Scaletread.Engine.Levels
 {
-
-    public class TestEntity
-    {
-        public Vector2 position;
-        public Vector2 spriteSheetPosition;
-    }
-
     public class TestLevel : ILevel
     {
-        public const int testsheetX = 26;
-        public const int testsheetY = 17;
-        public Vector2 currentTile;
-        private List<TestEntity> testSprites;
-        private int money = 1000;
+        private Texture2D _placeholderSquare;
+        private Texture2D _placeholderHUD;
+        private SpriteFont _placeholderHUDFont;
 
-        private Texture2D _testPlayer;
-        private Texture2D _tileSheet;
-        private Texture2D _testHUD;
-        private SpriteFont _testHUDFont;
-
+        private Player _player;
         private List<Creature> _creatures;
 
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
+            // Draw Player
+            DisplaySystem.DisplayEntity(spriteBatch, camera, this._player.DisplayInfo, this._player.PositionInfo, _placeholderSquare);
+
             // Draw Creatures
-            this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _tileSheet));
+            this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _placeholderSquare));
 
             #region debug
-            //Draw Mouse
-            spriteBatch.Draw(_tileSheet, position: camera.ScreenToWorld(Mouse.GetState().Position), sourceRectangle: new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize), (int)(currentTile.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize), origin: new Vector2(8, 8), color: Color.White * .5f);
             #endregion
         }
 
         public void LoadLevel(ContentManager content, Camera camera)
         {
-            _testPlayer = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
-            _tileSheet = content.Load<Texture2D>(DevConstants.ArtAssets.Spritesheet);
-            _testHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
-            _testHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
+            _placeholderSquare = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
+            _placeholderHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
+            _placeholderHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
             this._creatures = new List<Creature>();
 
             #region Debug Creation
-            currentTile = new Vector2(0, 0);
-            testSprites = new List<TestEntity>();
-            this._creatures.Add(new Creature()
+            this._player = new Player()
             {
                 Id = Guid.NewGuid(),
-                BaseVelocity = 300,
-                Velocity = 300,
-                Health = 100,
-                MaxHealth = 100,
-                Money = 1000,
+                WealthInfo = new Wealth()
+                {
+                    Money = 10000
+                },
+                HealthInfo = new Health()
+                {
+                    CurrentHealth = 100,
+                    MaxHealth = 100
+                },
+                MovementInfo = new Movement()
+                {
+                    BaseVelocity = 300,
+                    MovementType = MovementType.INPUT,
+                    Velocity = 300
+                },
                 DisplayInfo = new Display()
                 {
                     Color = Color.White,
@@ -80,101 +74,17 @@ namespace Scaletread.Engine.Levels
                 PositionInfo = new Position()
                 {
                     OriginPosition = new Vector2(20,20),
-                    TileHeight = 1,
-                    TileWidth = 1
+                    Width = DevConstants.Grid.CellSize,
+                    Height = DevConstants.Grid.CellSize
                 }
-            });
-            camera.TargetEntity = this._creatures[0].Id;
+            };
+            camera.TargetEntity = this._player.Id;
             #endregion
         }
 
         public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             #region Debug
-            Random random = new Random();
-            if(currentMouse.LeftButton == ButtonState.Pressed && prevMouse.LeftButton != ButtonState.Pressed)
-            {
-                this.money -= 25;
-                this._creatures.Add(new Creature()
-                {
-                    BaseVelocity = random.Next(),
-                    Velocity = random.Next(0, 400),
-                    Health = 100,
-                    Id = Guid.NewGuid(),
-                    MaxHealth = 100,
-                    Money = 100,
-                    MovementType = MovementType.INPUT,
-                    DisplayInfo = new Display()
-                    {
-                        Color = Color.White,
-                        Layer = DisplayLayer.FLOOR,
-                        Opacity = 1f,
-                        Origin = Vector2.Zero,
-                        Scale = 1f,
-                        Rotation = 0f,
-                        SpriteEffect = SpriteEffects.None,
-                        SpriteSource = new Rectangle((int)(currentTile.X * DevConstants.Grid.CellSize), (int)(currentTile.Y * DevConstants.Grid.CellSize), DevConstants.Grid.CellSize, DevConstants.Grid.CellSize)
-                    },
-                    PositionInfo = new Position()
-                    {
-                        OriginPosition = camera.ScreenToWorld(Mouse.GetState().Position),
-                        TileHeight = 1,
-                        TileWidth = 1
-                    }
-                });
-            }
-            if(currentKey.IsKeyDown(Keys.Left) && prevKey.IsKeyUp(Keys.Left))
-            {
-                int x = (int)currentTile.X - 1;
-                int y = (int)currentTile.Y;
-                if (x > testsheetX)
-                {
-                    x = 0;
-                    y = y + 1;
-                }
-                if (x < 0)
-                {
-                    x = 0;
-                    y = y - 1;
-                }
-                if (y < 0)
-                {
-                    y = testsheetY;
-                    x = testsheetX;
-                }
-                if (y > testsheetY)
-                {
-                    x = 0;
-                    y = 0;
-                }
-                currentTile = new Vector2(x, y);
-            }
-            if (currentKey.IsKeyDown(Keys.Right) && prevKey.IsKeyUp(Keys.Right))
-            {
-                int x = (int)currentTile.X + 1;
-                int y = (int)currentTile.Y;
-                if (x > testsheetX)
-                {
-                    x = 0;
-                    y = y + 1;
-                }
-                if (x < 0)
-                {
-                    x = 0;
-                    y = y - 1;
-                }
-                if (y < 0)
-                {
-                    y = testsheetY;
-                    x = testsheetX;
-                }
-                if (y > testsheetY)
-                {
-                    x = 0;
-                    y = 0;
-                }
-                currentTile = new Vector2(x, y);
-            }
             #endregion
 
             // Level input
@@ -188,15 +98,16 @@ namespace Scaletread.Engine.Levels
             CameraSystem.PanCamera(camera, gameTime);
 
             // Entity Movement Updates
+            MovementSystem.InputMovement(currentKey, prevKey, gameTime, this._player.PositionInfo, this._player.MovementInfo);
             this._creatures.ForEach(c =>
             {
-                switch(c.MovementType)
+                switch(c.MovementInfo.MovementType)
                 {
                     case MovementType.AI:
                         //AI Movement System Call
                         break;
                     case MovementType.INPUT:
-                        MovementSystem.InputMovement(currentKey, prevKey, gameTime, c.PositionInfo, c.Velocity);
+                        MovementSystem.InputMovement(currentKey, prevKey, gameTime, c.PositionInfo, c.MovementInfo);
                         break;
                 }
             });
@@ -204,15 +115,15 @@ namespace Scaletread.Engine.Levels
             // Entity Information Updates
 
             // Set up for next frame
-            CameraSystem.UpdateCameraTarget(this._creatures, camera);
+            CameraSystem.UpdateCameraTarget(this._player, this._creatures, camera);
             
             return this;
         }
 
         public void DrawUI(SpriteBatch spriteBatch, Camera camera)
         {
-            spriteBatch.Draw(_testHUD, new Vector2(20, 20));
-            spriteBatch.DrawString(_testHUDFont, this.money.ToString(), new Vector2(175, 30), Color.MonoGameOrange);
+            spriteBatch.Draw(_placeholderHUD, new Vector2(20, 20));
+            spriteBatch.DrawString(_placeholderHUDFont, this._player.WealthInfo.Money.ToString(), new Vector2(175, 30), Color.MonoGameOrange);
         }
     }
 }
