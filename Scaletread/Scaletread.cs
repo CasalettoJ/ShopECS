@@ -74,7 +74,7 @@ namespace Scaletread
         
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.NavajoWhite);
 
             // Draw Entities
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: this._camera.CurrentMatrix);
@@ -88,7 +88,7 @@ namespace Scaletread
 
             // Draw Debug
             this._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 /(decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25,25), Color.Yellow);
+            this._spriteBatch.DrawString(this._debugText, "FPS: " + Math.Round((1 /(decimal)gameTime.ElapsedGameTime.TotalSeconds), 2).ToString(), new Vector2(25,25), Color.DarkBlue);
             this._spriteBatch.End();
 
             base.Draw(gameTime);

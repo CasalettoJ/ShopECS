@@ -17,7 +17,9 @@ namespace Scaletread.Engine.Levels
     {
         private Texture2D _placeholderSquare;
         private Texture2D _placeholderHUD;
+
         private SpriteFont _placeholderHUDFont;
+        private SpriteFont _placeholderLabel;
 
         private Player _player;
         private List<Creature> _creatures;
@@ -30,6 +32,11 @@ namespace Scaletread.Engine.Levels
             // Draw Creatures
             this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _placeholderSquare));
 
+            // Draw Labels
+            DisplaySystem.DisplayLabel(spriteBatch, camera, this._player.DisplayInfo, this._player.LabelInfo, this._player.PositionInfo, _placeholderLabel, this._player.PositionInfo, this._player.DisplayInfo);
+            this._creatures.ForEach(c => DisplaySystem.DisplayLabel(spriteBatch, camera, c.DisplayInfo, c.LabelInfo, c.PositionInfo, this._placeholderLabel, this._player.PositionInfo, this._player.DisplayInfo));
+
+
             #region debug
             #endregion
         }
@@ -39,6 +46,7 @@ namespace Scaletread.Engine.Levels
             _placeholderSquare = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
             _placeholderHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
             _placeholderHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
+            _placeholderLabel = content.Load<SpriteFont>(DevConstants.FontAssets.Message);
             this._creatures = new List<Creature>();
 
             #region Debug Creation
@@ -62,9 +70,9 @@ namespace Scaletread.Engine.Levels
                 },
                 DisplayInfo = new Display()
                 {
-                    Color = Color.White,
+                    Color = Color.DarkBlue,
                     Opacity = 1f,
-                    Origin = Vector2.Zero,
+                    Origin = new Vector2(DevConstants.Grid.CellSize / 2, DevConstants.Grid.CellSize / 2),
                     Rotation = 0f,
                     Scale = 1f,
                     SpriteEffect = SpriteEffects.None,
@@ -78,6 +86,132 @@ namespace Scaletread.Engine.Levels
                     Height = DevConstants.Grid.CellSize
                 }
             };
+            this._creatures.Add(new Creature()
+            {
+                Id = Guid.NewGuid(),
+                HealthInfo = new Health()
+                {
+                    CurrentHealth = 100,
+                    MaxHealth = 100
+                },
+                MovementInfo = new Movement()
+                {
+                    BaseVelocity = 300,
+                    MovementType = MovementType.AI,
+                    Velocity = 300
+                },
+                DisplayInfo = new Display()
+                {
+                    Color = Color.DarkGreen,
+                    Opacity = 1f,
+                    Origin = new Vector2(DevConstants.Grid.CellSize / 2, DevConstants.Grid.CellSize / 2),
+                    Rotation = 0f,
+                    Scale = 1f,
+                    SpriteEffect = SpriteEffects.None,
+                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    Layer = DisplayLayer.FLOOR
+                },
+                PositionInfo = new Position()
+                {
+                    OriginPosition = new Vector2(520, 520),
+                    Width = DevConstants.Grid.CellSize,
+                    Height = DevConstants.Grid.CellSize
+                },
+                LabelInfo = new Label()
+                {
+                   WhenToShow = WhenToShowLabel.PLAYER_CLOSE,
+                   Color = Color.Purple,
+                   SpriteEffect = SpriteEffects.None,
+                   Displacement = new Vector2(0, -5),
+                   Rotation = 0f,
+                   Scale = 1f,
+                   Text = ">Talk"
+                }
+            });
+            this._creatures.Add(new Creature()
+            {
+                Id = Guid.NewGuid(),
+                HealthInfo = new Health()
+                {
+                    CurrentHealth = 100,
+                    MaxHealth = 100
+                },
+                MovementInfo = new Movement()
+                {
+                    BaseVelocity = 300,
+                    MovementType = MovementType.AI,
+                    Velocity = 300
+                },
+                DisplayInfo = new Display()
+                {
+                    Color = Color.DarkSeaGreen,
+                    Opacity = 1f,
+                    Origin = new Vector2(DevConstants.Grid.CellSize / 2, DevConstants.Grid.CellSize / 2),
+                    Rotation = 0f,
+                    Scale = 1f,
+                    SpriteEffect = SpriteEffects.None,
+                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    Layer = DisplayLayer.FLOOR
+                },
+                PositionInfo = new Position()
+                {
+                    OriginPosition = new Vector2(200, 400),
+                    Width = DevConstants.Grid.CellSize,
+                    Height = DevConstants.Grid.CellSize
+                },
+                LabelInfo = new Label()
+                {
+                    WhenToShow = WhenToShowLabel.PLAYER_FAR,
+                    Color = Color.Purple,
+                    SpriteEffect = SpriteEffects.None,
+                    Displacement = new Vector2(0, -5),
+                    Rotation = 0f,
+                    Scale = 1f,
+                    Text = ">Label Only Shows Far Away"
+                }
+            });
+            this._creatures.Add(new Creature()
+            {
+                Id = Guid.NewGuid(),
+                HealthInfo = new Health()
+                {
+                    CurrentHealth = 100,
+                    MaxHealth = 100
+                },
+                MovementInfo = new Movement()
+                {
+                    BaseVelocity = 300,
+                    MovementType = MovementType.AI,
+                    Velocity = 300
+                },
+                DisplayInfo = new Display()
+                {
+                    Color = Color.DarkRed,
+                    Opacity = 1f,
+                    Origin = new Vector2(DevConstants.Grid.CellSize/2, DevConstants.Grid.CellSize/2),
+                    Rotation = 0f,
+                    Scale = 1f,
+                    SpriteEffect = SpriteEffects.None,
+                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    Layer = DisplayLayer.FLOOR
+                },
+                PositionInfo = new Position()
+                {
+                    OriginPosition = new Vector2(600, 320),
+                    Width = DevConstants.Grid.CellSize,
+                    Height = DevConstants.Grid.CellSize
+                },
+                LabelInfo = new Label()
+                {
+                    WhenToShow = WhenToShowLabel.ALWAYS,
+                    Color = Color.Purple,
+                    SpriteEffect = SpriteEffects.None,
+                    Displacement = new Vector2(0, -5),
+                    Rotation = 0f,
+                    Scale = 1f,
+                    Text = ">Label Always Shows"
+                }
+            });
             camera.TargetEntity = this._player.Id;
             #endregion
         }

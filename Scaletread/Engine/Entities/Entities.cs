@@ -14,6 +14,7 @@ namespace Scaletread.Engine.Entities
         public Movement MovementInfo;
         public Display DisplayInfo;
         public Position PositionInfo;
+        public Label LabelInfo;
     }
 
     public class Creature
@@ -23,5 +24,13 @@ namespace Scaletread.Engine.Entities
         public Movement MovementInfo;
         public Display DisplayInfo;
         public Position PositionInfo;
+        public Label LabelInfo;
+    }
+
+    public class DisplayObject
+    {
+        public Guid Id;
+        public Position PositionInfo;
+        public Display DisplayInfo;
     }
 }

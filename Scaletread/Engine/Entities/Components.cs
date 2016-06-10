@@ -44,10 +44,11 @@ namespace Scaletread.Engine.Entities
     {
         public string Text;
         public float Scale;
-        public Vector2 Origin;
+        public Vector2 Displacement;
         public SpriteEffects SpriteEffect;
         public float Rotation;
         public WhenToShowLabel WhenToShow;
+        public Color Color;
     }
     #endregion
 

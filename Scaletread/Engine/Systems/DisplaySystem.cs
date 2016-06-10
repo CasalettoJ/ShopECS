@@ -13,26 +13,45 @@ namespace Scaletread.Engine.Systems
     {
         public static void DisplayEntity(SpriteBatch spriteBatch, Camera camera, Display displayInfo, Position positionInfo, Texture2D spriteSheet)
         {
-            if(positionInfo != null && displayInfo != null)
+            if(positionInfo != null && displayInfo != null && camera.IsInView(camera.CurrentMatrix, GetCameraBounds(positionInfo, camera)))
             {
-                Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + positionInfo.Width, (positionInfo.OriginPosition.Y) + positionInfo.Height), camera.CurrentMatrix);
-                Vector2 topLeft = Vector2.Transform(new Vector2(positionInfo.OriginPosition.X, positionInfo.OriginPosition.Y), camera.CurrentMatrix);
-                Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
+                spriteBatch.Draw(spriteSheet, positionInfo.OriginPosition, displayInfo.SpriteSource, displayInfo.Color * displayInfo.Opacity, displayInfo.Rotation, displayInfo.Origin, displayInfo.Scale, displayInfo.SpriteEffect, 0f);
+            }
+        }
 
-                if (camera.IsInView(camera.CurrentMatrix, cameraBounds))
+        public static void DisplayLabel(SpriteBatch spriteBatch, Camera camera, Display displayInfo, Label labelInfo, Position positionInfo, SpriteFont font, Position playerPosition, Display playerDisplay)
+        {
+            if(positionInfo != null && displayInfo != null && labelInfo != null && camera.IsInView(camera.CurrentMatrix, GetCameraBounds(positionInfo, camera)))
+            {
+                int distance = Math.Abs((int)Vector2.Distance(playerPosition.OriginPosition+playerDisplay.Origin, positionInfo.OriginPosition+displayInfo.Origin));
+                bool show = false;
+                switch (labelInfo.WhenToShow)
                 {
-                    spriteBatch.Draw(spriteSheet, positionInfo.OriginPosition, displayInfo.SpriteSource, displayInfo.Color * displayInfo.Opacity, displayInfo.Rotation, displayInfo.Origin, displayInfo.Scale, displayInfo.SpriteEffect, 0f);
+                    case WhenToShowLabel.ALWAYS:
+                        show = true;
+                        break;
+                    case WhenToShowLabel.PLAYER_CLOSE:
+                        show = distance <= DevConstants.ComponentConstants.DistanceUntilLabels;
+                        break;
+                    case WhenToShowLabel.PLAYER_FAR:
+                        show = distance >= DevConstants.ComponentConstants.DistanceBeforeFarLabels;
+                        break;
                 }
-                else
+
+                if (show)
                 {
-                    spriteBatch.Draw(spriteSheet, positionInfo.OriginPosition, displayInfo.SpriteSource, Color.Red * displayInfo.Opacity, displayInfo.Rotation, displayInfo.Origin, displayInfo.Scale, displayInfo.SpriteEffect, 0f);
+                    Vector2 fontSize = font.MeasureString(labelInfo.Text);
+                    spriteBatch.DrawString(font, labelInfo.Text, positionInfo.OriginPosition + labelInfo.Displacement - new Vector2(0, fontSize.Y), labelInfo.Color, labelInfo.Rotation, new Vector2(fontSize.X / 2, fontSize.Y / 2), labelInfo.Scale, labelInfo.SpriteEffect, 0f);
                 }
             }
         }
 
-        public static void DisplayLabel()
+        private static Rectangle GetCameraBounds(Position positionInfo, Camera camera)
         {
-            
+            Vector2 bottomRight = Vector2.Transform(new Vector2((positionInfo.OriginPosition.X) + positionInfo.Width, (positionInfo.OriginPosition.Y) + positionInfo.Height), camera.CurrentMatrix);
+            Vector2 topLeft = Vector2.Transform(new Vector2(positionInfo.OriginPosition.X, positionInfo.OriginPosition.Y), camera.CurrentMatrix);
+            Rectangle cameraBounds = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y);
+            return cameraBounds;
         }
     }
 }

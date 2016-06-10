@@ -28,5 +28,11 @@ namespace Scaletread
             public const string MessageLarge = "Fonts/MessageLarge";
             public const string Debug = "Fonts/Debug";
         }
+
+        public static class ComponentConstants
+        {
+            public const int DistanceUntilLabels = 75;
+            public const int DistanceBeforeFarLabels = 150;
+        }
     }
 }
