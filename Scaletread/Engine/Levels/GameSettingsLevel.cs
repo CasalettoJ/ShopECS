@@ -123,7 +123,7 @@ namespace Scaletread.Engine.Levels
                 _selectedOption -= 1;
                 if (_selectedOption < 0)
                 {
-                    _selectedOption = Enum.GetNames(typeof(Options)).Length - 2;
+                    _selectedOption = Enum.GetNames(typeof(Options)).Length - 1;
                 }
                 if (_selectedOption > Enum.GetNames(typeof(Options)).Length - 1)
                 {
@@ -136,7 +136,7 @@ namespace Scaletread.Engine.Levels
                 _selectedOption += 1;
                 if (_selectedOption < 0)
                 {
-                    _selectedOption = Enum.GetNames(typeof(Options)).Length - 2;
+                    _selectedOption = Enum.GetNames(typeof(Options)).Length - 1;
                 }
                 if (_selectedOption > Enum.GetNames(typeof(Options)).Length - 1)
                 {
