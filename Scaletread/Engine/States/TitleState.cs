@@ -31,6 +31,7 @@ namespace Scaletread.Engine.States
         }
 
         private IState _previousState;
+        private ILevel _currentSubMenu;
         private ContentManager _content;
         private SpriteFont _titleFont;
         private SpriteFont _optionFont;
@@ -47,7 +48,7 @@ namespace Scaletread.Engine.States
             _optionItems = new OptionItem[Enum.GetNames(typeof(Options)).Length];
             _optionItems[(int)Options.NEW_GAME] = new OptionItem() { Enabled = true, Text = "New Game" };
             _optionItems[(int)Options.LOAD_GAME] = new OptionItem() { Enabled = false, Text = "Load Game" };
-            _optionItems[(int)Options.GAME_SETTINGS] = new OptionItem() { Enabled = false, Text = "Game Settings" };
+            _optionItems[(int)Options.GAME_SETTINGS] = new OptionItem() { Enabled = true, Text = "Game Settings" };
             _optionItems[(int)Options.QUIT] = new OptionItem() { Enabled = true, Text = "Quit" };
         }
 
@@ -63,33 +64,47 @@ namespace Scaletread.Engine.States
 
         public IState UpdateState(GameTime gameTime, Camera camera, ref GameSettings gameSettings, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
-            camera.ResetCamera();
-
-            if (currentKey.IsKeyDown(Keys.Up) && prevKey.IsKeyUp(Keys.Up))
+            if (this._currentSubMenu == null)
             {
-                _selectedOption -= 1;
-                this.HandleOptionChange(-1);
-            }
+                camera.ResetCamera();
 
-            if (currentKey.IsKeyDown(Keys.Down) && prevKey.IsKeyUp(Keys.Down))
-            {
-                _selectedOption += 1;
-                this.HandleOptionChange(1);
-            }
-
-            if (currentKey.IsKeyDown(Keys.Enter) && prevKey.IsKeyUp(Keys.Enter))
-            {
-                switch(_selectedOption)
+                if (currentKey.IsKeyDown(Keys.Up) && prevKey.IsKeyUp(Keys.Up))
                 {
-                    case (int)Options.NEW_GAME:
-                        TestLevel level = new TestLevel();
-                        return new PlayingState(_content, camera, level, this);
-                    case (int)Options.LOAD_GAME:
-                        break;
-                    case (int)Options.GAME_SETTINGS:
-                        break;
-                    case (int)Options.QUIT:
-                        return null;
+                    _selectedOption -= 1;
+                    this.HandleOptionChange(-1);
+                }
+
+                if (currentKey.IsKeyDown(Keys.Down) && prevKey.IsKeyUp(Keys.Down))
+                {
+                    _selectedOption += 1;
+                    this.HandleOptionChange(1);
+                }
+
+                if (currentKey.IsKeyDown(Keys.Enter) && prevKey.IsKeyUp(Keys.Enter))
+                {
+                    switch (_selectedOption)
+                    {
+                        case (int)Options.NEW_GAME:
+                            TestLevel level = new TestLevel();
+                            return new PlayingState(_content, camera, level, this);
+                        case (int)Options.LOAD_GAME:
+                            break;
+                        case (int)Options.GAME_SETTINGS:
+                            this._currentSubMenu = new GameSettingsLevel(ref gameSettings);
+                            this._currentSubMenu.LoadLevel(this._content, camera);
+                            break;
+                        case (int)Options.QUIT:
+                            return null;
+                    }
+                }
+            }
+            else
+            {
+                ILevel previousSubMenu = _currentSubMenu;
+                this._currentSubMenu = this._currentSubMenu.Update(gameTime, camera, ref gameSettings, currentKey, prevKey, currentMouse, prevMouse);
+                if (this._currentSubMenu != previousSubMenu && this._currentSubMenu != null)
+                {
+                    this._currentSubMenu.LoadLevel(this._content, camera);
                 }
             }
 
@@ -107,6 +122,11 @@ namespace Scaletread.Engine.States
                 Vector2 size = _optionFont.MeasureString(message);
                 Color optionColor = (_selectedOption == optionNum) ? Color.DarkViolet : Color.MonoGameOrange;
                 spriteBatch.DrawString(_optionFont, message, new Vector2(20, 150 + (optionNum++ * size.Y)), option.Enabled ? optionColor : Color.Black, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            }
+            
+            if (this._currentSubMenu != null)
+            {
+                this._currentSubMenu.DrawUI(spriteBatch, camera);
             }
         }
 
