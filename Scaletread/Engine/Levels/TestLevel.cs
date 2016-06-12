@@ -10,13 +10,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Scaletread.Engine.Entities;
 using Scaletread.Engine.Systems;
+using Scaletread.Engine.FileIO.Objects;
 
 namespace Scaletread.Engine.Levels
 {
     public class TestLevel : ILevel
     {
-        private Texture2D _placeholderSquare;
-        private Texture2D _placeholderHUD;
+        private Texture2D _placeholderSpritesheet;
 
         private SpriteFont _placeholderHUDFont;
         private SpriteFont _placeholderLabel;
@@ -27,10 +27,10 @@ namespace Scaletread.Engine.Levels
         public void DrawContent(SpriteBatch spriteBatch, Camera camera)
         {
             // Draw Player
-            DisplaySystem.DisplayEntity(spriteBatch, camera, this._player.DisplayInfo, this._player.PositionInfo, _placeholderSquare);
+            DisplaySystem.DisplayEntity(spriteBatch, camera, this._player.DisplayInfo, this._player.PositionInfo, _placeholderSpritesheet);
 
             // Draw Creatures
-            this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _placeholderSquare));
+            this._creatures.ForEach(c => DisplaySystem.DisplayEntity(spriteBatch, camera, c.DisplayInfo, c.PositionInfo, _placeholderSpritesheet));
 
             // Draw Labels
             DisplaySystem.DisplayLabel(spriteBatch, camera, this._player.DisplayInfo, this._player.LabelInfo, this._player.PositionInfo, _placeholderLabel, this._player.PositionInfo, this._player.DisplayInfo);
@@ -43,10 +43,9 @@ namespace Scaletread.Engine.Levels
 
         public void LoadLevel(ContentManager content, Camera camera)
         {
-            _placeholderSquare = content.Load<Texture2D>(DevConstants.ArtAssets.Placeholder);
-            _placeholderHUD = content.Load<Texture2D>(DevConstants.ArtAssets.PlaceholderHUD);
             _placeholderHUDFont = content.Load<SpriteFont>(DevConstants.FontAssets.MessageLarge);
             _placeholderLabel = content.Load<SpriteFont>(DevConstants.FontAssets.Message);
+            _placeholderSpritesheet = content.Load<Texture2D>(DevConstants.ArtAssets.Spritesheet);
             this._creatures = new List<Creature>();
 
             #region Debug Creation
@@ -76,7 +75,7 @@ namespace Scaletread.Engine.Levels
                     Rotation = 0f,
                     Scale = 1f,
                     SpriteEffect = SpriteEffects.None,
-                    SpriteSource = new Rectangle(23*DevConstants.Grid.CellSize, 42*DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    SpriteSource = new Rectangle(7*DevConstants.Grid.CellSize, 1*DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
                     Layer = DisplayLayer.FLOOR
                 },
                 PositionInfo = new Position()
@@ -108,7 +107,7 @@ namespace Scaletread.Engine.Levels
                     Rotation = 0f,
                     Scale = 1f,
                     SpriteEffect = SpriteEffects.None,
-                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    SpriteSource = new Rectangle(7 * DevConstants.Grid.CellSize, 1 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
                     Layer = DisplayLayer.FLOOR
                 },
                 PositionInfo = new Position()
@@ -150,7 +149,7 @@ namespace Scaletread.Engine.Levels
                     Rotation = 0f,
                     Scale = 1f,
                     SpriteEffect = SpriteEffects.None,
-                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    SpriteSource = new Rectangle(7 * DevConstants.Grid.CellSize, 1 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
                     Layer = DisplayLayer.FLOOR
                 },
                 PositionInfo = new Position()
@@ -192,7 +191,7 @@ namespace Scaletread.Engine.Levels
                     Rotation = 0f,
                     Scale = 1f,
                     SpriteEffect = SpriteEffects.None,
-                    SpriteSource = new Rectangle(23 * DevConstants.Grid.CellSize, 42 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
+                    SpriteSource = new Rectangle(7 * DevConstants.Grid.CellSize, 1 * DevConstants.Grid.CellSize, DevConstants.Grid.CellSize, DevConstants.Grid.CellSize),
                     Layer = DisplayLayer.FLOOR
                 },
                 PositionInfo = new Position()
@@ -216,16 +215,10 @@ namespace Scaletread.Engine.Levels
             #endregion
         }
 
-        public ILevel Update(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
+        public ILevel Update(GameTime gameTime, Camera camera, ref GameSettings gameSettings, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
             #region Debug
             #endregion
-
-            // Level input
-            if (currentKey.IsKeyDown(Keys.Escape))
-            {
-                return null;
-            }
 
             // Camera Updates
             CameraSystem.ControlCamera(currentKey, prevKey, camera, gameTime);
@@ -256,8 +249,7 @@ namespace Scaletread.Engine.Levels
 
         public void DrawUI(SpriteBatch spriteBatch, Camera camera)
         {
-            spriteBatch.Draw(_placeholderHUD, new Vector2(20, 20));
-            spriteBatch.DrawString(_placeholderHUDFont, this._player.WealthInfo.Money.ToString(), new Vector2(175, 30), Color.MonoGameOrange);
+            spriteBatch.DrawString(_placeholderHUDFont, "$"+this._player.WealthInfo.Money.ToString(), new Vector2(30, 30), Color.MonoGameOrange);
         }
     }
 }

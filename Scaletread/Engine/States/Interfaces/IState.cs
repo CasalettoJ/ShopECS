@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Scaletread.Engine.FileIO.Objects;
 using Scaletread.Engine.Levels.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Scaletread.Engine.States.Interfaces
 {
     public interface IState
     {
-        IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse);
+        IState UpdateState(GameTime gameTime, Camera camera, ref GameSettings gameSettings, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse);
         void DrawContent(SpriteBatch spriteBatch, Camera camera);
         void DrawUI(SpriteBatch spriteBatch, Camera camera);
         void SetLevel(ILevel level, Camera camera);

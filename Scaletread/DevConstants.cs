@@ -10,10 +10,7 @@ namespace Scaletread
     {
         public static class ArtAssets
         {
-            public const string Placeholder = "Sprites/placeholder";
-            public const string PlaceholderTitle = "Sprites/placeholdertitle";
             public const string Spritesheet = "Sprites/dcss";
-            public const string PlaceholderHUD = "Sprites/HUD Money2";
         }
 
         public static class Grid
@@ -33,6 +30,16 @@ namespace Scaletread
         {
             public const int DistanceUntilLabels = 75;
             public const int DistanceBeforeFarLabels = 150;
+        }
+
+        public static class FileIOConstants
+        {
+            public static class GameSettings
+            {
+                public const string SettingsDirectory = @"Settings/";
+                public const string CurrentSettings = SettingsDirectory + "Config.json";
+                public const string DefaultGameSettings = SettingsDirectory + "DefaultConfig.json";
+            }
         }
     }
 }

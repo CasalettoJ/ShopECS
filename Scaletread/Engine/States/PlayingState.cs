@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Scaletread.Engine.Levels.Interfaces;
 using Microsoft.Xna.Framework.Content;
+using Scaletread.Engine.FileIO.Objects;
 
 namespace Scaletread.Engine.States
 {
@@ -40,10 +41,15 @@ namespace Scaletread.Engine.States
             }
         }
 
-        public IState UpdateState(GameTime gameTime, Camera camera, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
+        public IState UpdateState(GameTime gameTime, Camera camera, ref GameSettings gameSettings, KeyboardState currentKey, KeyboardState prevKey, MouseState currentMouse, MouseState prevMouse)
         {
+            if (currentKey.IsKeyDown(Keys.Escape) && prevKey.IsKeyUp(Keys.Escape))
+            {
+                return new PauseState(this._content, this);
+            }
+
             ILevel nextLevel = this._currentLevel;
-            nextLevel = this._currentLevel.Update(gameTime, camera, currentKey, prevKey, currentMouse, prevMouse);
+            nextLevel = this._currentLevel.Update(gameTime, camera, ref gameSettings, currentKey, prevKey, currentMouse, prevMouse);
 
             if(nextLevel != this._currentLevel && nextLevel != null)
             {
